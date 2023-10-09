@@ -1,3 +1,3 @@
 <template>
-  <h1>hola login</h1>
+    <h1>Selecciona una opción</h1>
 </template>
