@@ -5,23 +5,41 @@
   <q-btn label="Agregar" color="primary" @click="guardar()" />
 
   <div class="q-pa-md">
-    <q-table title="Clientes" :rows="rows" :columns="columns" row-key="name" />
+    <q-table title="Clientes" :rows="rows" :columns="columns" row-key="name" >
+      <template>
+        <h1>h</h1>
+      </template>
+    </q-table>
   </div>
 
 
   <q-dialog v-model="modal" persistent>
     <q-card style="min-width: 350px">
       <q-card-section>
-        <div class="text-h6">Your address</div>
+        <div class="text-h6">Nombre:</div>
       </q-card-section>
 
       <q-card-section class="q-pt-none">
-        <q-input dense v-model="address" autofocus @keyup.enter="prompt = false" />
+        <q-input dense v-model="data.nombre" autofocus @keyup.enter="prompt = false" />
+      </q-card-section>
+      <q-card-section>
+        <div class="text-h6">Cedula:</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <q-input dense v-model="data.cedula" autofocus @keyup.enter="prompt = false" />
+      </q-card-section>
+      <q-card-section>
+        <div class="text-h6">Email:</div>
+      </q-card-section>
+
+      <q-card-section class="q-pt-none">
+        <q-input dense v-model="data.email" autofocus @keyup.enter="prompt = false" />
       </q-card-section>
 
       <q-card-actions align="right" class="text-primary">
         <q-btn flat label="Cancel" v-close-popup />
-        <q-btn flat label="Add address" v-close-popup />
+        <q-btn flat label="Guardar" @click="gestionarDatos()"/>
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -57,6 +75,7 @@ const columns = ref([
 
 const rows = ref([])
 const modal = ref(false)
+const editar = ref(false)
 
 async function obtenerClientes() {
   console.log("Esperando datos");
@@ -69,6 +88,28 @@ obtenerClientes()
 
 function guardar() {
   modal.value = true
+  editar.value=false
+}
+
+const data = ref({
+  nombre: "",
+  cedula: "",
+  email: ""
+})
+
+async function gestionarDatos(){
+  const cliente = await axios.post(`cliente/guardar`, data.value)
+
+  console.log(cliente);
+}
+
+async function des_activar(){
+  const funciones = {
+    activar: "/activar",
+    desactivar: "/inactivar"
+  }
+
+  const cliente = await axios.put(`cliente${funciones}`)
 }
 
 </script>
